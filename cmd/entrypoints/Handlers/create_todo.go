@@ -27,7 +27,6 @@ func (handler *CreateTodoHandler) handle(c *gin.Context) *errors.APIError {
 	ctx := c.Request.Context()
 
 	req := contracts.CreateTodoRequest{}
-
 	causes, err := config.BindAndValidate(c, &req)
 
 	if err != nil {

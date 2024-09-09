@@ -18,7 +18,6 @@ var (
 const (
 	QueryParam = "form"
 	Header     = "header"
-	Body       = "json"
 )
 
 func init() {
@@ -72,6 +71,7 @@ func GetCauses(obj interface{}, err error) []map[string]string {
 
 		field, ok := reflected.Type().FieldByName(validationErr.StructField())
 		errorType := "body"
+
 		if ok {
 			errorType = getType(field.Tag)
 		}

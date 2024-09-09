@@ -13,8 +13,10 @@ func NewTodo(db *gorm.DB) *Todo {
 	return &Todo{DB: db}
 }
 
-func (t *Todo) Create(todo *entities.Todo) error {
-	return t.DB.Create(todo).Error
+func (t *Todo) Create(todo *entities.Todo) (*entities.Todo, error) {
+	err := t.DB.Create(todo).Error
+
+	return todo, err
 }
 
 func (t *Todo) FindByID(id string) (*entities.Todo, error) {

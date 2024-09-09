@@ -8,6 +8,14 @@ import (
 	"gorm.io/gorm"
 )
 
+type ResponseCreateTodo struct {
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Status      string `json:"status"`
+	CreatedAt   string `json:"created_at"`
+}
+
 type CreateTodoUseCase interface {
 	Execute(ctx context.Context, req *contracts.CreateTodoRequest) (interface{}, error)
 }
@@ -22,12 +30,20 @@ type CreateTodoUseCaseImpl struct {
 	TodoDB *databases.Todo
 }
 
-func (imp *CreateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.CreateTodoRequest) (interface{}, error) {
+func (imp *CreateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.CreateTodoRequest) (ResponseCreateTodo, error) {
 	td := entities.NewTodo(req.Title, req.Description, req.Status)
 
-	if err := imp.TodoDB.Create(td); err != nil {
-		return nil, err
+	res, err := imp.TodoDB.Create(td)
+
+	if err != nil {
+		return ResponseCreateTodo{}, err
 	}
 
-	return req, nil
+	return ResponseCreateTodo{
+		ID:          res.ID,
+		Title:       res.Title,
+		Description: res.Description,
+		Status:      res.Status,
+		CreatedAt:   res.CreatedAt.String(),
+	}, nil
 }
