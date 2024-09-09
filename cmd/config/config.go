@@ -7,15 +7,16 @@ import (
 var cfg *conf
 
 type conf struct {
-	DBName string `mapstructure:"database"`
-	DBUSer string `mapstructure:"user"`
-	DBPass string `mapstructure:"password"`
+	DBName string `mapstructure:"DB_NAME"`
+	DBUSer string `mapstructure:"DB_USER"`
+	DBPass string `mapstructure:"DB_PASS"`
 }
 
 func LoadConfig(path string) (*conf, error) {
-	viper.SetConfigName("config")
+	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)
+	viper.SetConfigFile(".env")
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()

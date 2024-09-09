@@ -1,9 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/riquemorozine/todo_list_go/cmd/app"
+	"github.com/riquemorozine/todo_list_go/cmd/config"
 	"github.com/riquemorozine/todo_list_go/cmd/infra/dependencies"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"os"
 )
@@ -11,11 +15,22 @@ import (
 func main() {
 	r := gin.Default()
 	l := log.New(os.Stdout, "[todo-list-go] ", log.LstdFlags)
+	c, err := config.LoadConfig(".")
 
-	handlers := dependencies.Start()
+	if err != nil {
+		panic(err)
+	}
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s", "localhost", c.DBUSer, c.DBPass, c.DBName, "5432")
+	db, err := gorm.Open(postgres.Open(dsn))
+
+	if err != nil {
+		panic(err)
+	}
+
+	handlers := dependencies.Start(db)
 
 	app.ConfigureMappings(r, handlers)
-	dependencies.Start()
 
 	l.Println("Starting server on port 8080")
 	r.Run()
