@@ -17,7 +17,7 @@ type ResponseCreateTodo struct {
 }
 
 type CreateTodoUseCase interface {
-	Execute(ctx context.Context, req *contracts.CreateTodoRequest) (interface{}, error)
+	Execute(ctx context.Context, req *contracts.CreateTodoRequest) (ResponseCreateTodo, error)
 }
 
 func NewCreateTodoUseCase(db *gorm.DB) CreateTodoUseCaseImpl {
@@ -33,17 +33,17 @@ type CreateTodoUseCaseImpl struct {
 func (imp *CreateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.CreateTodoRequest) (ResponseCreateTodo, error) {
 	td := entities.NewTodo(req.Title, req.Description, req.Status)
 
-	res, err := imp.TodoDB.Create(td)
+	err := imp.TodoDB.Create(td)
 
 	if err != nil {
 		return ResponseCreateTodo{}, err
 	}
 
 	return ResponseCreateTodo{
-		ID:          res.ID,
-		Title:       res.Title,
-		Description: res.Description,
-		Status:      res.Status,
-		CreatedAt:   res.CreatedAt.String(),
+		ID:          td.ID,
+		Title:       td.Title,
+		Description: td.Description,
+		Status:      td.Status,
+		CreatedAt:   td.CreatedAt.String(),
 	}, nil
 }
