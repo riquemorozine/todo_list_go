@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/riquemorozine/todo_list_go/cmd/app"
 	"github.com/riquemorozine/todo_list_go/cmd/config"
+	"github.com/riquemorozine/todo_list_go/cmd/entities"
 	"github.com/riquemorozine/todo_list_go/cmd/infra/dependencies"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -23,6 +24,7 @@ func main() {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s", "localhost", c.DBUSer, c.DBPass, c.DBName, "5432")
 	db, err := gorm.Open(postgres.Open(dsn))
+	db.AutoMigrate(&entities.Todo{})
 
 	if err != nil {
 		panic(err)

@@ -9,8 +9,8 @@ type Todo struct {
 	DB *gorm.DB
 }
 
-func NewTodo() *Todo {
-	return &Todo{}
+func NewTodo(db *gorm.DB) *Todo {
+	return &Todo{DB: db}
 }
 
 func (t *Todo) Create(todo *entities.Todo) error {
