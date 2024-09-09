@@ -1,0 +1,14 @@
+services:
+  db:
+    container_name: todo_list_db
+    image: postgres:13
+    restart: always
+    ports:
+        - "5432:5432"
+        - "5433:5433"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+        - ./db_data:/var/lib/postgresql/data
