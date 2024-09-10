@@ -1,7 +1,6 @@
 package dependencies
 
 import (
-	"github.com/go-chi/jwtauth"
 	"github.com/riquemorozine/todo_list_go/cmd/core/usecases"
 	"github.com/riquemorozine/todo_list_go/cmd/entrypoints"
 	"github.com/riquemorozine/todo_list_go/cmd/entrypoints/Handlers"
@@ -14,11 +13,11 @@ type HandleContainer struct {
 	LoginUser  entrypoints.Handler
 }
 
-func Start(db *gorm.DB, jwt *jwtauth.JWTAuth, jwtExpiresIn int) *HandleContainer {
+func Start(db *gorm.DB, JwtSecret string, JwtExpiresIn int) *HandleContainer {
 	createTodoUseCase := usecases.NewCreateTodoUseCase(db)
 
 	createUserUseCase := usecases.NewCreateUserUseCase(db)
-	loginUserUseCase := usecases.NewUserLoginUseCase(db, jwt, jwtExpiresIn)
+	loginUserUseCase := usecases.NewUserLoginUseCase(db, JwtSecret, JwtExpiresIn)
 
 	apiHandlers := HandleContainer{}
 

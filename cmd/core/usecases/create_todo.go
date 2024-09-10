@@ -31,6 +31,7 @@ type CreateTodoUseCaseImpl struct {
 }
 
 func (imp *CreateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.CreateTodoRequest) (ResponseCreateTodo, error) {
+
 	td := entities.NewTodo(req.Title, req.Description, req.Status, "124")
 
 	err := imp.TodoDB.Create(td)
