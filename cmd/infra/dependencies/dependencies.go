@@ -9,16 +9,22 @@ import (
 
 type HandleContainer struct {
 	CreateTodo entrypoints.Handler
+	CreateUser entrypoints.Handler
 }
 
 func Start(db *gorm.DB) *HandleContainer {
-
 	createTodoUseCase := usecases.NewCreateTodoUseCase(db)
+
+	createUserUseCase := usecases.NewCreateUserUseCase(db)
 
 	apiHandlers := HandleContainer{}
 
 	apiHandlers.CreateTodo = &Handlers.CreateTodoHandler{
 		UseCase: &createTodoUseCase,
+	}
+
+	apiHandlers.CreateUser = &Handlers.CreateUserHandler{
+		UseCase: &createUserUseCase,
 	}
 
 	return &apiHandlers

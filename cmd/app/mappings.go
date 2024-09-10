@@ -8,5 +8,7 @@ import (
 func ConfigureMappings(router *gin.Engine, apiHandlers *dependencies.HandleContainer) *gin.Engine {
 	router.POST("/todos", apiHandlers.CreateTodo.Handle)
 
+	router.POST("/users", apiHandlers.CreateUser.Handle)
+
 	return router
 }

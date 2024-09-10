@@ -5,6 +5,7 @@ import (
 	"github.com/riquemorozine/todo_list_go/cmd/core/contracts"
 	"github.com/riquemorozine/todo_list_go/cmd/entities"
 	"github.com/riquemorozine/todo_list_go/cmd/infra/databases"
+	"gorm.io/gorm"
 )
 
 type ResponseCreateUser struct {
@@ -17,8 +18,10 @@ type CreateUserUseCase interface {
 	Execute(ctx context.Context, req *contracts.CreateUserRequest) (ResponseCreateUser, error)
 }
 
-func NewCreateUserUseCase() CreateUserUseCaseImpl {
-	return CreateUserUseCaseImpl{}
+func NewCreateUserUseCase(db *gorm.DB) CreateUserUseCaseImpl {
+	return CreateUserUseCaseImpl{
+		UserDB: databases.NewUser(db),
+	}
 }
 
 type CreateUserUseCaseImpl struct {

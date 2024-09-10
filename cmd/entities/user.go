@@ -7,7 +7,7 @@ type User struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
-	Todos    []Todo `gorm:"foreignKey:UserID"`
+	Todos    []Todo `gorm:"foreignKey:UserId"`
 }
 
 func NewUser(Name, Email, Password string) *User {
