@@ -1,4 +1,4 @@
-package usecases
+package todo
 
 import (
 	"context"
@@ -17,7 +17,7 @@ type ResponseCreateTodo struct {
 }
 
 type CreateTodoUseCase interface {
-	Execute(ctx context.Context, req *contracts.CreateTodoRequest) (ResponseCreateTodo, error)
+	Execute(ctx context.Context, req *contracts.CreateTodoRequest, userId string) (ResponseCreateTodo, error)
 }
 
 func NewCreateTodoUseCase(db *gorm.DB) CreateTodoUseCaseImpl {
@@ -30,9 +30,9 @@ type CreateTodoUseCaseImpl struct {
 	TodoDB *databases.Todo
 }
 
-func (imp *CreateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.CreateTodoRequest) (ResponseCreateTodo, error) {
+func (imp *CreateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.CreateTodoRequest, userId string) (ResponseCreateTodo, error) {
 
-	td := entities.NewTodo(req.Title, req.Description, req.Status, "124")
+	td := entities.NewTodo(req.Title, req.Description, req.Status, userId)
 
 	err := imp.TodoDB.Create(td)
 

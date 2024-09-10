@@ -1,4 +1,4 @@
-package usecases
+package todo
 
 import (
 	"context"
@@ -29,12 +29,12 @@ func TestCreateTodoUseCase_Execute(t *testing.T) {
 
 	response, err := usecase.Execute(context.Background(), req)
 	if err != nil {
-		t.Fatalf("could not create todo: %v", err)
+		t.Fatalf("could not create todos: %v", err)
 	}
 
 	res, err := usecase.TodoDB.FindByID(response.ID)
 	if err != nil {
-		t.Fatalf("could not find todo: %v", err)
+		t.Fatalf("could not find todos: %v", err)
 	}
 
 	assert.NoError(t, err)

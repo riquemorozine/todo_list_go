@@ -1,16 +1,16 @@
-package Handlers
+package users
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/riquemorozine/todo_list_go/cmd/config"
 	"github.com/riquemorozine/todo_list_go/cmd/core/contracts"
-	"github.com/riquemorozine/todo_list_go/cmd/core/usecases"
+	"github.com/riquemorozine/todo_list_go/cmd/core/usecases/user"
 	"github.com/riquemorozine/todo_list_go/cmd/errors"
 	"net/http"
 )
 
 type LoginUserHandler struct {
-	UseCase usecases.UserLoginUseCase
+	UseCase user.UserLoginUseCase
 }
 
 func (handler *LoginUserHandler) Handle(c *gin.Context) {

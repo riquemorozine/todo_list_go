@@ -1,34 +1,41 @@
 package dependencies
 
 import (
-	"github.com/riquemorozine/todo_list_go/cmd/core/usecases"
+	"github.com/riquemorozine/todo_list_go/cmd/core/usecases/todo"
+	"github.com/riquemorozine/todo_list_go/cmd/core/usecases/user"
 	"github.com/riquemorozine/todo_list_go/cmd/entrypoints"
-	"github.com/riquemorozine/todo_list_go/cmd/entrypoints/Handlers"
+	todo2 "github.com/riquemorozine/todo_list_go/cmd/entrypoints/Handlers/todos"
+	"github.com/riquemorozine/todo_list_go/cmd/entrypoints/Handlers/users"
 	"gorm.io/gorm"
 )
 
 type HandleContainer struct {
 	CreateTodo entrypoints.Handler
+	FindAll    entrypoints.Handler
 	CreateUser entrypoints.Handler
 	LoginUser  entrypoints.Handler
 }
 
 func Start(db *gorm.DB, JwtSecret string, JwtExpiresIn int) *HandleContainer {
-	createTodoUseCase := usecases.NewCreateTodoUseCase(db)
+	createTodoUseCase := todo.NewCreateTodoUseCase(db)
+	findAllTodoUseCase := todo.NewFindAllTodoUseCase(db)
 
-	createUserUseCase := usecases.NewCreateUserUseCase(db)
-	loginUserUseCase := usecases.NewUserLoginUseCase(db, JwtSecret, JwtExpiresIn)
+	createUserUseCase := user.NewCreateUserUseCase(db)
+	loginUserUseCase := user.NewUserLoginUseCase(db, JwtSecret, JwtExpiresIn)
 
 	apiHandlers := HandleContainer{}
 
-	apiHandlers.CreateTodo = &Handlers.CreateTodoHandler{
+	apiHandlers.CreateTodo = &todo2.CreateTodoHandler{
 		UseCase: &createTodoUseCase,
 	}
+	apiHandlers.FindAll = &todo2.FindAllTodosHandler{
+		UseCase: &findAllTodoUseCase,
+	}
 
-	apiHandlers.CreateUser = &Handlers.CreateUserHandler{
+	apiHandlers.CreateUser = &users.CreateUserHandler{
 		UseCase: &createUserUseCase,
 	}
-	apiHandlers.LoginUser = &Handlers.LoginUserHandler{
+	apiHandlers.LoginUser = &users.LoginUserHandler{
 		UseCase: &loginUserUseCase,
 	}
 

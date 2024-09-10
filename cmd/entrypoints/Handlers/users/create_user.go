@@ -1,32 +1,30 @@
-package Handlers
+package users
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/riquemorozine/todo_list_go/cmd/config"
 	"github.com/riquemorozine/todo_list_go/cmd/core/contracts"
-	"github.com/riquemorozine/todo_list_go/cmd/core/usecases"
+	"github.com/riquemorozine/todo_list_go/cmd/core/usecases/user"
 	"github.com/riquemorozine/todo_list_go/cmd/errors"
 	"net/http"
 )
 
-type CreateTodoHandler struct {
-	UseCase usecases.CreateTodoUseCase
+type CreateUserHandler struct {
+	UseCase user.CreateUserUseCase
 }
 
-func (handler *CreateTodoHandler) Handle(c *gin.Context) {
+func (handler *CreateUserHandler) Handle(c *gin.Context) {
 	err := handler.handle(c)
 
 	if err != nil {
 		c.JSON(err.Status, err)
 	}
-
-	return
 }
 
-func (handler *CreateTodoHandler) handle(c *gin.Context) *errors.APIError {
+func (handler *CreateUserHandler) handle(c *gin.Context) *errors.APIError {
 	ctx := c.Request.Context()
 
-	req := contracts.CreateTodoRequest{}
+	req := contracts.CreateUserRequest{}
 	causes, err := config.BindAndValidate(c, &req)
 
 	if err != nil {
@@ -39,7 +37,7 @@ func (handler *CreateTodoHandler) handle(c *gin.Context) *errors.APIError {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	c.JSON(http.StatusOK, r)
+	c.JSON(200, r)
 
 	return nil
 }

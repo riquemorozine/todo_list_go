@@ -29,18 +29,21 @@ func (t *Todo) FindByID(id string) (*entities.Todo, error) {
 	return todo, nil
 }
 
-func (t *Todo) FindAll() (*[]entities.Todo, error) {
+func (t *Todo) FindAll(userId string, sort string, page, pageSize int) (*[]entities.Todo, error) {
 	todos := &[]entities.Todo{}
+	var err error
 
-	err := t.DB.Find(todos).Error
-
-	if err != nil {
-		return nil, err
+	if sort != "" && sort != "asc" && sort != "desc" {
+		sort = "asc"
 	}
 
-	// TODO: Pagination and filtering by user id
+	if page != 0 && pageSize != 0 {
+		err = t.DB.Limit(pageSize).Offset((page-1)*pageSize).Order("created_at "+sort).Where("user_id = ?", userId).Find(todos).Error
+	} else {
+		err = t.DB.Where("user_id = ?", userId).Find(todos).Error
+	}
 
-	return todos, nil
+	return todos, err
 }
 
 func (t *Todo) Update(todo *entities.Todo) error {

@@ -15,7 +15,7 @@ import (
 
 func main() {
 	r := gin.Default()
-	l := log.New(os.Stdout, "[todo-list-go] ", log.LstdFlags)
+	l := log.New(os.Stdout, "[todos-list-go] ", log.LstdFlags)
 	c, err := config.LoadConfig(".")
 
 	if err != nil {

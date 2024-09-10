@@ -10,8 +10,9 @@ func ConfigureMappings(router *gin.Engine, apiHandlers *dependencies.HandleConta
 	router.POST("/users", apiHandlers.CreateUser.Handle)
 	router.POST("/login", apiHandlers.LoginUser.Handle)
 
-	router.Use(middlewares.AuthMiddleware())
-	router.POST("/todos", apiHandlers.CreateTodo.Handle)
+	todos := router.Group("/todos", middlewares.AuthMiddleware())
+	todos.POST("/", apiHandlers.CreateTodo.Handle)
+	todos.GET("/", apiHandlers.FindAll.Handle)
 
 	return router
 }
