@@ -13,10 +13,8 @@ func NewTodo(db *gorm.DB) *Todo {
 	return &Todo{DB: db}
 }
 
-func (t *Todo) Create(todo *entities.Todo) (*entities.Todo, error) {
-	err := t.DB.Create(todo).Error
-
-	return todo, err
+func (t *Todo) Create(todo *entities.Todo) error {
+	return t.DB.Create(todo).Error
 }
 
 func (t *Todo) FindByID(id string) (*entities.Todo, error) {
@@ -29,4 +27,40 @@ func (t *Todo) FindByID(id string) (*entities.Todo, error) {
 	}
 
 	return todo, nil
+}
+
+func (t *Todo) FindAll() (*[]entities.Todo, error) {
+	todos := &[]entities.Todo{}
+
+	err := t.DB.Find(todos).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: Pagination and filtering by user id
+
+	return todos, nil
+}
+
+func (t *Todo) Update(todo *entities.Todo) error {
+	_, err := t.FindByID(todo.ID)
+
+	if err != nil {
+		return err
+	}
+
+	return t.DB.Save(todo).Error
+}
+
+func (t *Todo) Delete(id string) error {
+	todo := &entities.Todo{}
+
+	err := t.DB.First(todo, "id = ?", id).Error
+
+	if err != nil {
+		return err
+	}
+
+	return t.DB.Delete(todo).Error
 }
