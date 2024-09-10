@@ -29,9 +29,13 @@ type CreateUserUseCaseImpl struct {
 }
 
 func (imp *CreateUserUseCaseImpl) Execute(ctx context.Context, req *contracts.CreateUserRequest) (ResponseCreateUser, error) {
-	newUser := entities.NewUser(req.Name, req.Email, req.Password)
+	newUser, err := entities.NewUser(req.Name, req.Email, req.Password)
 
-	err := imp.UserDB.Create(newUser)
+	if err != nil {
+		return ResponseCreateUser{}, err
+	}
+
+	err = imp.UserDB.Create(newUser)
 
 	if err != nil {
 		return ResponseCreateUser{}, err

@@ -41,4 +41,5 @@ func TestCreateUser(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, req.Name, res.Name)
 	assert.Equal(t, req.Email, res.Email)
+	assert.NotEqual(t, req.Password, res.Password)
 }
