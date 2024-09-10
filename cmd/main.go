@@ -30,7 +30,7 @@ func main() {
 		panic(err)
 	}
 
-	handlers := dependencies.Start(db)
+	handlers := dependencies.Start(db, c.TokenAuth, c.JWTExpiresIn)
 
 	app.ConfigureMappings(r, handlers)
 

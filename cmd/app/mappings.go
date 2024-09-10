@@ -9,6 +9,7 @@ func ConfigureMappings(router *gin.Engine, apiHandlers *dependencies.HandleConta
 	router.POST("/todos", apiHandlers.CreateTodo.Handle)
 
 	router.POST("/users", apiHandlers.CreateUser.Handle)
+	router.POST("/login", apiHandlers.LoginUser.Handle)
 
 	return router
 }

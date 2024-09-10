@@ -16,9 +16,11 @@ type UserLoginUseCase interface {
 	Execute(req *contracts.LoginUserRequest) (ResponseUserLogin, error)
 }
 
-func NewUserLoginUseCase(db *gorm.DB) *UserLoginUseCaseImpl {
-	return &UserLoginUseCaseImpl{
-		DB: databases.NewUser(db),
+func NewUserLoginUseCase(db *gorm.DB, jwt *jwtauth.JWTAuth, jwtExpiresIn int) UserLoginUseCaseImpl {
+	return UserLoginUseCaseImpl{
+		DB:           databases.NewUser(db),
+		JWT:          jwt,
+		JwtExpiresIn: jwtExpiresIn,
 	}
 }
 
