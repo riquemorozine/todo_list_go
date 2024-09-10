@@ -13,5 +13,6 @@ type TodoInterface interface {
 type UserInterface interface {
 	Create(user *entities.User) error
 	FindById(id string) (*entities.User, error)
+	FindByEmail(email string) (*entities.User, error)
 	Delete(id string) error
 }

@@ -1,6 +1,7 @@
 package databases
 
 import (
+	"errors"
 	"github.com/riquemorozine/todo_list_go/cmd/entities"
 	"gorm.io/gorm"
 )
@@ -14,6 +15,12 @@ func NewUser(db *gorm.DB) *User {
 }
 
 func (u *User) Create(user *entities.User) error {
+	exist, err := u.FindByEmail(user.Email)
+
+	if err == nil && exist != nil {
+		return errors.New("user email already exists")
+	}
+
 	return u.DB.Create(user).Error
 }
 
@@ -39,4 +46,16 @@ func (u *User) Delete(id string) error {
 	}
 
 	return u.DB.Delete(user).Error
+}
+
+func (u *User) FindByEmail(email string) (*entities.User, error) {
+	user := &entities.User{}
+
+	err := u.DB.First(user, "email = ?", email).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
