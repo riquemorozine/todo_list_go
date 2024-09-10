@@ -24,7 +24,7 @@ func main() {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s", "localhost", c.DBUSer, c.DBPass, c.DBName, "5432")
 	db, err := gorm.Open(postgres.Open(dsn))
-	db.AutoMigrate(&entities.Todo{})
+	db.AutoMigrate(&entities.Todo{}, &entities.User{})
 
 	if err != nil {
 		panic(err)

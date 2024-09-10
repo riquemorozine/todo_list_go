@@ -9,3 +9,9 @@ type TodoInterface interface {
 	FindByName(name string) (*[]entities.Todo, error)
 	Delete(id string) error
 }
+
+type UserInterface interface {
+	Create(user *entities.User) error
+	FindById(id string) (*entities.User, error)
+	Delete(id string) error
+}
