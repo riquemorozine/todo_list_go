@@ -29,3 +29,9 @@ func NewUser(Name, Email, Password string) (*User, error) {
 
 	return user, nil
 }
+
+func (u *User) ComparePassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+
+	return err == nil
+}

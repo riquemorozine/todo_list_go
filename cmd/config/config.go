@@ -1,15 +1,19 @@
 package config
 
 import (
+	"github.com/go-chi/jwtauth"
 	"github.com/spf13/viper"
 )
 
 var cfg *conf
 
 type conf struct {
-	DBName string `mapstructure:"DB_NAME"`
-	DBUSer string `mapstructure:"DB_USER"`
-	DBPass string `mapstructure:"DB_PASS"`
+	DBName       string `mapstructure:"DB_NAME"`
+	DBUSer       string `mapstructure:"DB_USER"`
+	DBPass       string `mapstructure:"DB_PASS"`
+	JWTSecret    string `mapstructure:"JWT_SECRET"`
+	JWTExpiresIn int    `mapstructure:"JWT_EXPIRES_IN"`
+	TokenAuth    *jwtauth.JWTAuth
 }
 
 func LoadConfig(path string) (*conf, error) {
@@ -30,5 +34,6 @@ func LoadConfig(path string) (*conf, error) {
 		panic(err)
 	}
 
+	cfg.TokenAuth = jwtauth.New("HS256", []byte(cfg.JWTSecret), nil)
 	return cfg, nil
 }
