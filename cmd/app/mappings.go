@@ -12,7 +12,7 @@ func ConfigureMappings(router *gin.Engine, apiHandlers *dependencies.HandleConta
 
 	todos := router.Group("/todos", middlewares.AuthMiddleware())
 	todos.POST("/", apiHandlers.CreateTodo.Handle)
-	todos.GET("/", apiHandlers.FindAll.Handle)
+	todos.GET("/", apiHandlers.FindAllTodo.Handle)
 	todos.PUT("/:id", apiHandlers.UpdateTodo.Handle)
 
 	return router
