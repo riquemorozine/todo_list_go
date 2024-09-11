@@ -1,0 +1,264 @@
+openapi: 3.0.0
+info:
+  title: "Todo API"
+  description: "A simple API to manage todos"
+  version: "1.0.0"
+servers:
+    - url: "http://localhost:8080"
+
+paths:
+  /users:
+    post:
+      tags:
+        - "users"
+      summary: "Create a user"
+
+      responses:
+        '201':
+          description: "User created"
+        '400':
+            description: "Invalid input"
+      requestBody:
+        $ref: "#/components/requestBodies/CreateUser"
+  /login:
+    post:
+      tags:
+        - "users"
+      summary: "Login a user"
+      responses:
+        '200':
+          $ref: "#/components/responses/LoginUser"
+        '400':
+            description: "Invalid input"
+      requestBody:
+        $ref: "#/components/requestBodies/LoginUser"
+
+  /todos:
+    post:
+      tags:
+        - "todos"
+      summary: "Create a todo"
+      security:
+        - bearerAuth: [ ]
+      responses:
+          '201':
+            $ref: "#/components/responses/CreateTodo"
+          '400':
+            description: "Invalid input"
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+      requestBody:
+        $ref: "#/components/requestBodies/CreateTodo"
+    get:
+      tags:
+        - "todos"
+      summary: "Get all todos"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: "Page number"
+          schema:
+            type: integer
+            example: "1"
+        - name: limit
+          in: query
+          required: false
+          description: "Number of items per page"
+          schema:
+            type: integer
+            example: "10"
+        - name: sort
+          in: query
+          required: false
+          description: "Sort order"
+          schema:
+            type: string
+            example: "asc"
+            enum:
+              - "asc"
+              - "desc"
+      responses:
+        "200":
+          $ref: "#/components/responses/GetAllTodos"
+        "401":
+            $ref: "#/components/responses/UnauthorizedError"
+
+  /todos/{id}:
+    get:
+      tags:
+        - "todos"
+      summary: "Get a todo"
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Todo ID"
+          schema:
+            type: integer
+            example: "1"
+      responses:
+        "200":
+            $ref: "#/components/responses/CreateTodo"
+        "401":
+            $ref: "#/components/responses/UnauthorizedError"
+        "404":
+            description: "Todo not found"
+      "requestBody":
+        $ref: "#/components/requestBodies/CreateTodo"
+
+    delete:
+        tags:
+          - "todos"
+        summary: "Delete a todo"
+        security:
+          - bearerAuth: [ ]
+        parameters:
+            - name: id
+              in: path
+              required: true
+              description: "Todo ID"
+              schema:
+                  type: integer
+                  example: "1"
+        responses:
+            "200":
+                description: "Todo deleted"
+            "401":
+                $ref: "#/components/responses/UnauthorizedError"
+            "404":
+                description: "Todo not found"
+        "requestBody":
+            $ref: "#/components/requestBodies/CreateTodo"
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  requestBodies:
+    CreateUser:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "John Doe"
+              email:
+                type: string
+                format: email
+                example: "jhondoe@email.com"
+              password:
+                type: string
+                format: password
+                example: "password123"
+    LoginUser:
+        content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                      example: "johndoe@email.com"
+                    password:
+                      type: string
+                      format: password
+                      example: "password123"
+
+    CreateTodo:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: "Buy milk"
+              description:
+                type: string
+                example: "Buy 2 liters of milk"
+              status:
+                type: string
+                example: "pending"
+
+  responses:
+    UnauthorizedError:
+      description: "Unauthorized"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Unauthorized"
+
+    LoginUser:
+        description: "User logged in"
+        content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    access_token:
+                        type: string
+                        example: "token"
+    CreateTodo:
+        description: "Todo created"
+        content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    id:
+                        type: integer
+                        example: 1
+                    title:
+                        type: string
+                        example: "Buy milk"
+                    description:
+                        type: string
+                        example: "Buy 2 liters of milk"
+                    status:
+                        type: string
+                        example: "pending"
+                    created_at:
+                        type: string
+                        example: "2021-01-01T00:00:00Z"
+
+    GetAllTodos:
+        description: "List of todos"
+        content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                          type: integer
+                          example: 1
+                      title:
+                          type: string
+                          example: "Buy milk"
+                      description:
+                          type: string
+                          example: "Buy 2 liters of milk"
+                      status:
+                          type: string
+                          example: "pending"
+                      created_at:
+                          type: string
+                          example: "2021-01-01T00:00:00Z"
+
