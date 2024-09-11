@@ -27,7 +27,7 @@ func TestCreateTodoUseCase_Execute(t *testing.T) {
 
 	usecase := NewCreateTodoUseCase(db)
 
-	response, err := usecase.Execute(context.Background(), req)
+	response, err := usecase.Execute(context.Background(), req, "1")
 	if err != nil {
 		t.Fatalf("could not create todos: %v", err)
 	}
