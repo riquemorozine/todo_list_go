@@ -10,8 +10,8 @@ type DeleteTodoUseCase interface {
 	Execute(ctx context.Context, todoId string) error
 }
 
-func NewDeleteTodoUseCase(db *gorm.DB) *DeleteTodoUseCaseImpl {
-	return &DeleteTodoUseCaseImpl{
+func NewDeleteTodoUseCase(db *gorm.DB) DeleteTodoUseCaseImpl {
+	return DeleteTodoUseCaseImpl{
 		TodoDB: *databases.NewTodo(db),
 	}
 }
@@ -30,6 +30,6 @@ func (imp *DeleteTodoUseCaseImpl) Execute(ctx context.Context, todoId string) er
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }

@@ -23,6 +23,7 @@ func Start(db *gorm.DB, JwtSecret string, JwtExpiresIn int) *HandleContainer {
 	createTodoUseCase := todo.NewCreateTodoUseCase(db)
 	findAllTodoUseCase := todo.NewFindAllTodoUseCase(db)
 	updateTodoUseCase := todo.NewUpdateTodoUseCase(db)
+	deleteTodoUseCase := todo.NewDeleteTodoUseCase(db)
 
 	createUserUseCase := user.NewCreateUserUseCase(db)
 	loginUserUseCase := user.NewUserLoginUseCase(db, JwtSecret, JwtExpiresIn)
@@ -37,6 +38,9 @@ func Start(db *gorm.DB, JwtSecret string, JwtExpiresIn int) *HandleContainer {
 	}
 	apiHandlers.UpdateTodo = &todo2.UpdateTodoHandler{
 		UseCase: &updateTodoUseCase,
+	}
+	apiHandlers.DeleteTodo = &todo2.DeleteTodoHandler{
+		UseCase: &deleteTodoUseCase,
 	}
 
 	apiHandlers.CreateUser = &users.CreateUserHandler{
