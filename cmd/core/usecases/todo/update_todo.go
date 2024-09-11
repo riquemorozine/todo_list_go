@@ -15,7 +15,7 @@ type UpdateTodoResponse struct {
 }
 
 type UpdateTodoUseCase interface {
-	Execute(ctx context.Context, req *contracts.UpdateTodoRequest) (*UpdateTodoResponse, error)
+	Execute(ctx context.Context, req *contracts.UpdateTodoRequest, todoId string) (*UpdateTodoResponse, error)
 }
 
 func NewUpdateTodoUseCase(db *gorm.DB) UpdateTodoUseCaseImpl {
@@ -28,8 +28,8 @@ type UpdateTodoUseCaseImpl struct {
 	TodoDB *databases.Todo
 }
 
-func (imp *UpdateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.UpdateTodoRequest) (*UpdateTodoResponse, error) {
-	todo, err := imp.TodoDB.FindByID(req.ID)
+func (imp *UpdateTodoUseCaseImpl) Execute(ctx context.Context, req *contracts.UpdateTodoRequest, todoId string) (*UpdateTodoResponse, error) {
+	todo, err := imp.TodoDB.FindByID(todoId)
 
 	if err != nil {
 		return nil, err

@@ -12,6 +12,8 @@ import (
 type HandleContainer struct {
 	CreateTodo entrypoints.Handler
 	FindAll    entrypoints.Handler
+	UpdateTodo entrypoints.Handler
+
 	CreateUser entrypoints.Handler
 	LoginUser  entrypoints.Handler
 }
@@ -19,6 +21,7 @@ type HandleContainer struct {
 func Start(db *gorm.DB, JwtSecret string, JwtExpiresIn int) *HandleContainer {
 	createTodoUseCase := todo.NewCreateTodoUseCase(db)
 	findAllTodoUseCase := todo.NewFindAllTodoUseCase(db)
+	updateTodoUseCase := todo.NewUpdateTodoUseCase(db)
 
 	createUserUseCase := user.NewCreateUserUseCase(db)
 	loginUserUseCase := user.NewUserLoginUseCase(db, JwtSecret, JwtExpiresIn)
@@ -30,6 +33,9 @@ func Start(db *gorm.DB, JwtSecret string, JwtExpiresIn int) *HandleContainer {
 	}
 	apiHandlers.FindAll = &todo2.FindAllTodosHandler{
 		UseCase: &findAllTodoUseCase,
+	}
+	apiHandlers.UpdateTodo = &todo2.UpdateTodoHandler{
+		UseCase: &updateTodoUseCase,
 	}
 
 	apiHandlers.CreateUser = &users.CreateUserHandler{
